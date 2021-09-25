@@ -446,6 +446,7 @@ namespace Sky_note
             this.buttonCircular1.TabIndex = 11;
             this.buttonCircular1.Text = "+";
             this.buttonCircular1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.buttonCircular1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             this.buttonCircular1.Click += new System.EventHandler(this.buttonCircular1_Click);
             // 
             // label2
@@ -475,6 +476,7 @@ namespace Sky_note
             this.buttonCircular2.TabIndex = 13;
             this.buttonCircular2.Text = "-";
             this.buttonCircular2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.buttonCircular2.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             this.buttonCircular2.Click += new System.EventHandler(this.buttonCircular2_Click);
             // 
             // MainForm

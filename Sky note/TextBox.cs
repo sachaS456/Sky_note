@@ -9,7 +9,7 @@ using Sky_framework;
 
 namespace Sky_note
 {
-    [ObsoleteAttribute("This method is obsolete. Project abandoned.", false)]
+    [ObsoleteAttribute("This class is obsolete. Project abandoned.", false)]
     internal sealed class TextBox : Sky_framework.Rectangle
     {
         private System.Windows.Forms.TextBox TextBoxWriter = new System.Windows.Forms.TextBox();

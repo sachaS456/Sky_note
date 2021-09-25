@@ -72,11 +72,11 @@ namespace Sky_note
             this.label2.TabIndex = 5;
             if (language == Language.French)
             {
-                this.label2.Text = "Version : 3.0.0 (Beta1-30-08-2021)\r\n\r\nDéveloppée par Sacha Himber";
+                this.label2.Text = "Version : 3.0.0 (Beta2-25-09-2021)\r\n\r\nDéveloppée par Sacha Himber";
             }
             else
             {
-                this.label2.Text = "Version : 3.0.0 (Beta1-30-08-2021)\r\n\r\nDevelopped by Sacha Himber";
+                this.label2.Text = "Version : 3.0.0 (Beta2-25-09-2021)\r\n\r\nDevelopped by Sacha Himber";
             }
             // 
             // label3
@@ -108,11 +108,11 @@ namespace Sky_note
             this.label4.TabIndex = 7;
             if (language == Language.French)
             {
-                this.label4.Text = "Librairies utilisées : Net 5.0.9, \r\nSky Framework 3.0.0.";
+                this.label4.Text = "Librairies utilisées : Net 5.0.10, \r\nSky Framework 3.0.0.";
             }
             else
             {
-                this.label4.Text = "Libraries used : Net 5.0.9, \r\nSky Framework 3.0.0.";
+                this.label4.Text = "Libraries used : Net 5.0.10, \r\nSky Framework 3.0.0.";
             }
             // 
             // button1
@@ -136,7 +136,7 @@ namespace Sky_note
             // 
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BorderColor = System.Drawing.Color.Indigo;
-            this.ClientSize = new System.Drawing.Size(366, 299);
+            this.ClientSize = new System.Drawing.Size(356, 269);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.rectangle1);
