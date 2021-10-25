@@ -1,4 +1,22 @@
-﻿using System;
+﻿/*--------------------------------------------------------------------------------------------------------------------
+ Copyright (C) 2021 Himber Sacha
+
+ This program is free software: you can redistribute it and/or modify
+ it under the +terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 2 of the License, or
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see https://www.gnu.org/licenses/gpl-2.0.html. 
+
+--------------------------------------------------------------------------------------------------------------------*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,8 +39,6 @@ namespace Sky_note
         internal AboutForm(Language language)
         {
             InitializeComponent(ref language);
-
-            this.Location = new Point(Screen.FromControl(this).WorkingArea.Width / 2 - this.Width / 2, Screen.FromControl(this).WorkingArea.Height / 2 - this.Height / 2);
         }
 
         private void InitializeComponent(ref Language language)
@@ -72,11 +88,11 @@ namespace Sky_note
             this.label2.TabIndex = 5;
             if (language == Language.French)
             {
-                this.label2.Text = "Version : 3.0.0 (Beta2-25-09-2021)\r\n\r\nDéveloppée par Sacha Himber";
+                this.label2.Text = "Version : 3.0.0\r\n\r\nDéveloppée par Sacha Himber";
             }
             else
             {
-                this.label2.Text = "Version : 3.0.0 (Beta2-25-09-2021)\r\n\r\nDevelopped by Sacha Himber";
+                this.label2.Text = "Version : 3.0.0\r\n\r\nDevelopped by Sacha Himber";
             }
             // 
             // label3
@@ -108,11 +124,11 @@ namespace Sky_note
             this.label4.TabIndex = 7;
             if (language == Language.French)
             {
-                this.label4.Text = "Librairies utilisées : Net 5.0.10, \r\nSky Framework 3.0.0.";
+                this.label4.Text = "Librairies utilisées : Net 5.0.11, \r\nSky Framework 3.0.0.";
             }
             else
             {
-                this.label4.Text = "Libraries used : Net 5.0.10, \r\nSky Framework 3.0.0.";
+                this.label4.Text = "Libraries used : Net 5.0.11, \r\nSky Framework 3.0.0.";
             }
             // 
             // button1
@@ -137,6 +153,7 @@ namespace Sky_note
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BorderColor = System.Drawing.Color.Indigo;
             this.ClientSize = new System.Drawing.Size(356, 269);
+            this.StartPosition = FormStartPosition.CenterScreen;
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.rectangle1);

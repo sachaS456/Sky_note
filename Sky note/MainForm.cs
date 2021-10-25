@@ -1,4 +1,22 @@
-﻿using System;
+﻿/*--------------------------------------------------------------------------------------------------------------------
+ Copyright (C) 2021 Himber Sacha
+
+ This program is free software: you can redistribute it and/or modify
+ it under the +terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 2 of the License, or
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see https://www.gnu.org/licenses/gpl-2.0.html. 
+
+--------------------------------------------------------------------------------------------------------------------*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,6 +49,7 @@ namespace Sky_note
         private short Zoom = 100;
         private Language language;
         private Control c = new Control();
+        private bool TextSaved = true;
 
         internal MainForm() : base()
         {
@@ -51,11 +70,11 @@ namespace Sky_note
             MenuDeroulantFile.ShowSide = Side.Top;
             if (language == Language.French)
             {
-                MenuDeroulantFile.AddButton(new string[6] { "Ouvrir", "Enregistrer sous", "Enregistrer", "Nouveau", "Nouvelle fenêtre", "Quitter" });
+                MenuDeroulantFile.SetButton(new string[6] { "Ouvrir", "Enregistrer sous", "Enregistrer", "Nouveau", "Nouvelle fenêtre", "Quitter" });
             }
             else
             {
-                MenuDeroulantFile.AddButton(new string[6] { "Open", "Save as", "Save", "New", "New window", "Leave" });
+                MenuDeroulantFile.SetButton(new string[6] { "Open", "Save as", "Save", "New", "New window", "Leave" });
             }
             MenuDeroulantFile.SetButtonClique(0, new MouseEventHandler(OpenFile_Click));
             MenuDeroulantFile.SetButtonClique(1, new MouseEventHandler(SaveAs_Click));
@@ -71,7 +90,7 @@ namespace Sky_note
             MenuDeroulantEncoding.Border = 0;
             MenuDeroulantEncoding.ShowSide = Side.Bottom;
             MenuDeroulantEncoding.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            MenuDeroulantEncoding.AddButton(new string[6] { "UTF-8", "UTF-16 BE", "UTF-16 LE", "UTF-32", "ASCII", "ISO-8859-1" });
+            MenuDeroulantEncoding.SetButton(new string[6] { "UTF-8", "UTF-16 BE", "UTF-16 LE", "UTF-32", "ASCII", "ISO-8859-1" });
             MenuDeroulantEncoding.SetButtonClique(0, new MouseEventHandler(ButtonUTF8_Click));
             MenuDeroulantEncoding.SetButtonClique(1, new MouseEventHandler(ButtonUTF16BE_Click));
             MenuDeroulantEncoding.SetButtonClique(2, new MouseEventHandler(ButtonUTF16LE_Click));
@@ -81,16 +100,15 @@ namespace Sky_note
             this.Controls.Add(MenuDeroulantEncoding);
             MenuDeroulantEncoding.BringToFront();
 
-            this.Location = new Point(Screen.FromControl(this).WorkingArea.Width / 2 - this.Width / 2, Screen.FromControl(this).WorkingArea.Height / 2 - this.Height / 2);
             HideMenuDeroulant();
             CheckUpdate();
             SelectText();
             this.Show();
 
-            OpenMediaOnStarting();
+            OpenFileOnStarting();
         }
 
-        private async void OpenMediaOnStarting()
+        private async void OpenFileOnStarting()
         {
             if (Environment.GetCommandLineArgs().Last() != Application.ExecutablePath && Environment.GetCommandLineArgs().Last() != Application.StartupPath + @"Sky note.dll")
             {
@@ -101,6 +119,7 @@ namespace Sky_note
                     encodingUsed = streamReader.CurrentEncoding;
                     ButtonEncode.Text = streamReader.CurrentEncoding.BodyName;
                     FileLoaded = Environment.GetCommandLineArgs().Last();
+                    this.Text = "Sky note - " + FileLoaded;
                     streamReader.Close();
                 }
             }
@@ -233,31 +252,37 @@ namespace Sky_note
         private void ButtonUTF8_Click(object sender, MouseEventArgs e)
         {
             encodingUsed = Encoding.UTF8;
+            ButtonEncode.Text = Encoding.UTF8.BodyName;
         }
 
         private void ButtonUTF16BE_Click(object sender, MouseEventArgs e)
         {
             encodingUsed = Encoding.BigEndianUnicode;
+            ButtonEncode.Text = Encoding.BigEndianUnicode.BodyName;
         }
 
         private void ButtonUTF16LE_Click(object sender, MouseEventArgs e)
         {
             encodingUsed = Encoding.Unicode;
+            ButtonEncode.Text = Encoding.Unicode.BodyName;
         }
 
         private void ButtonUTF32_Click(object sender, MouseEventArgs e)
         {
             encodingUsed = Encoding.UTF32;
+            ButtonEncode.Text = Encoding.UTF32.BodyName;
         }
 
         private void ButtonASCII_Click(object sender, MouseEventArgs e)
         {
             encodingUsed = Encoding.ASCII;
+            ButtonEncode.Text = Encoding.ASCII.BodyName;
         }
 
         private void ButtonISO88591_Click(object sender, MouseEventArgs e)
         {
             encodingUsed = Encoding.Latin1;
+            ButtonEncode.Text = Encoding.Latin1.BodyName;
         }
 
         private async void HideMenuDeroulant()
@@ -411,6 +436,7 @@ namespace Sky_note
             this.textBox1.Size = new System.Drawing.Size(917, 477);
             this.textBox1.TabIndex = 9;
             this.textBox1.WordWrap = false;
+            this.textBox1.TextChanged += new EventHandler(textBox1_TextChanged);
             // 
             // ButtonAbout
             // 
@@ -485,6 +511,10 @@ namespace Sky_note
             this.BorderColor = System.Drawing.Color.Indigo;
             this.ButtonMaximizedVisible = true;
             this.ClientSize = new System.Drawing.Size(922, 552);
+            this.MinimumSize = new Size(400, 250);
+            this.KeyPreview = true;
+            this.KeyDown += new KeyEventHandler(This_KeyDown);
+            this.FormClosing += new FormClosingEventHandler(This_FormClosing);
             this.Controls.Add(this.buttonCircular2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.buttonCircular1);
@@ -512,6 +542,55 @@ namespace Sky_note
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void This_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (textBox1.Focused == false)
+            {
+                e.SuppressKeyPress = true;
+            }
+
+            if (e.Control && e.KeyCode == Keys.O)
+            {
+                OpenFile();
+                return;
+            }
+
+            if (e.Control && e.KeyCode == Keys.Q)
+            {
+                this.Close();
+                return;
+            }
+
+            if (e.Control && e.KeyCode == Keys.N)
+            {
+                NewFile();
+                return;
+            }
+
+            if (e.Control && e.KeyCode == Keys.S)
+            {
+                SaveFile();
+                return;
+            }
+
+            if (e.Control && e.Shift && e.KeyCode == Keys.S)
+            {
+                SaveAsFile();
+                return;
+            }
+
+            if (e.Control && e.Shift && e.KeyCode == Keys.N)
+            {
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                process.StartInfo.UseShellExecute = true;
+                process.StartInfo.FileName = Application.ExecutablePath;
+                process.Start();
+                process.Close();
+                process = null;
+                return;
+            }
         }
 
         private void ButtonSelectAll_Click(object sender, EventArgs e)
@@ -547,7 +626,7 @@ namespace Sky_note
 
         private async void SelectText()
         {
-            while (textBox1 != null && this != null && ButtonSelectAll != null)
+            while (this.Disposing == false && this.IsDisposed == false && textBox1.Disposing == false && textBox1.IsDisposed == false && textBox1 != null && this != null && ButtonSelectAll != null)
             {
                 if (textBox1.SelectionLength > 0)
                 {
@@ -584,7 +663,7 @@ namespace Sky_note
                     }
                 }
 
-                await Task.Delay(1);
+                await Task.Delay(10);
             }
         }
 
@@ -704,7 +783,7 @@ namespace Sky_note
             }
         }
 
-        private void OpenFile_Click(object sender, MouseEventArgs e)
+        private void OpenFile()
         {
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
@@ -724,12 +803,19 @@ namespace Sky_note
                         encodingUsed = streamReader.CurrentEncoding;
                         ButtonEncode.Text = streamReader.CurrentEncoding.BodyName;
                         FileLoaded = dialog.FileName;
+                        this.Text = "Sky note - " + FileLoaded;
                         streamReader.Close();
+                        TextSaved = true;
                     }
                 }
 
                 dialog.Dispose();
             }
+        }
+
+        private void OpenFile_Click(object sender, MouseEventArgs e)
+        {
+            OpenFile();
         }
 
         private Encoding EncodeAdapt(string FileName)
@@ -807,7 +893,7 @@ namespace Sky_note
             }
         }
 
-        private void SaveAs_Click(object sender, MouseEventArgs e)
+        private void SaveAsFile()
         {
             using (SaveFileDialog dialog = new SaveFileDialog())
             {
@@ -827,6 +913,7 @@ namespace Sky_note
                         streamWriter.Write(textBox1.Text);
                         FileLoaded = dialog.FileName;
                         streamWriter.Close();
+                        TextSaved = true;
                     }
                 }
 
@@ -834,11 +921,16 @@ namespace Sky_note
             }
         }
 
-        private void Save_Click(object sender, MouseEventArgs e)
+        private void SaveAs_Click(object sender, MouseEventArgs e)
+        {
+            SaveAsFile();
+        }
+
+        private void SaveFile()
         {
             if (FileLoaded == string.Empty)
             {
-                SaveAs_Click(sender, e);
+                SaveAsFile();
             }
             else
             {
@@ -846,11 +938,17 @@ namespace Sky_note
                 {
                     streamWriter.Write(textBox1.Text);
                     streamWriter.Close();
+                    TextSaved = true;
                 }
             }
         }
 
-        private void New_Click(object sender, MouseEventArgs e)
+        private void Save_Click(object sender, MouseEventArgs e)
+        {
+            SaveFile();
+        }
+
+        private void NewFile()
         {
             if (language == Language.French)
             {
@@ -870,6 +968,11 @@ namespace Sky_note
                     textBox1.Text = string.Empty;
                 }
             }
+        }
+
+        private void New_Click(object sender, MouseEventArgs e)
+        {
+            NewFile();
         }
 
         private void NewWindow_Click(object sender, MouseEventArgs e)
@@ -960,6 +1063,43 @@ namespace Sky_note
             label2.Text = "Zoom : " + Zoom;
 
             UpdateZoom();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (TextSaved == true)
+            {
+                TextSaved = false;
+            }
+        }
+
+        private void This_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (TextSaved == false)
+            {
+                if (language == Language.French)
+                {
+                    if (MessageBox.Show("Êtes vous sûr de vouloir fermer Sky note? Vos modifications vont être perdu.", "Sky note", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.No)
+                    {
+                        e.Cancel = true;
+                    }
+                    else
+                    {
+                        e.Cancel = false;
+                    }
+                }
+                else
+                {
+                    if (MessageBox.Show("Are you sure you want to close Sky note? Your changes will be lost.", "Sky note", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.No)
+                    {
+                        e.Cancel = true;
+                    }
+                    else
+                    {
+                        e.Cancel = false;
+                    }
+                }
+            }
         }
     }
 
