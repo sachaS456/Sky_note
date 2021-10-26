@@ -1,4 +1,4 @@
-# Sky_note
+# Sky note
 It is a text reading app
 
 This project is developed with Visual Studio and .Net 5.
