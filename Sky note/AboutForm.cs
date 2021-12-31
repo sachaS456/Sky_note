@@ -23,17 +23,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
-using Sky_framework;
+using Sky_UI;
 
 namespace Sky_note
 {
     internal sealed class AboutForm : SkyForms
     {
-        private Sky_framework.Rectangle rectangle1;
+        private Sky_UI.Rectangle rectangle1;
         private Label label2;
         private Label label3;
         private Label label4;
-        private Sky_framework.Button button1;
+        private Sky_UI.Button button1;
         private Label label1;
 
         internal AboutForm(Language language)
@@ -44,12 +44,12 @@ namespace Sky_note
         private void InitializeComponent(ref Language language)
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
-            this.rectangle1 = new Sky_framework.Rectangle();
+            this.rectangle1 = new Sky_UI.Rectangle();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.button1 = new Sky_framework.Button();
+            this.button1 = new Sky_UI.Button();
             this.SuspendLayout();
             // 
             // rectangle1
@@ -88,11 +88,11 @@ namespace Sky_note
             this.label2.TabIndex = 5;
             if (language == Language.French)
             {
-                this.label2.Text = "Version : 3.0.0\r\n\r\nDéveloppée par Sacha Himber";
+                this.label2.Text = "Version : 3.0.1\r\n\r\nDéveloppée par Sacha Himber";
             }
             else
             {
-                this.label2.Text = "Version : 3.0.0\r\n\r\nDevelopped by Sacha Himber";
+                this.label2.Text = "Version : 3.0.1\r\n\r\nDevelopped by Sacha Himber";
             }
             // 
             // label3
@@ -124,11 +124,11 @@ namespace Sky_note
             this.label4.TabIndex = 7;
             if (language == Language.French)
             {
-                this.label4.Text = "Librairies utilisées : Net 5.0.11, \r\nSky Framework 3.0.0.";
+                this.label4.Text = "Librairies utilisées : Net 5.0.13, \r\nSky UI 3.0.1.";
             }
             else
             {
-                this.label4.Text = "Libraries used : Net 5.0.11, \r\nSky Framework 3.0.0.";
+                this.label4.Text = "Libraries used : Net 5.0.13, \r\nSky UI 3.0.1.";
             }
             // 
             // button1
@@ -160,7 +160,7 @@ namespace Sky_note
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Location = new System.Drawing.Point(0, 0);
+            this.Location = new Point(Screen.FromControl(this).WorkingArea.Width / 2 - this.Width / 2, Screen.FromControl(this).WorkingArea.Height / 2 - this.Height / 2);
             this.Name = "AboutForm";
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("rectangle1.BackgroundImage")));
             this.Redimensionnable = false;

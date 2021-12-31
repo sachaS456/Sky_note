@@ -23,7 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
-using Sky_framework;
+using Sky_UI;
 using System.IO;
 using Microsoft.Win32;
 using Sky_Updater;
@@ -32,16 +32,16 @@ namespace Sky_note
 {
     internal sealed class MainForm : SkyForms
     {
-        private Sky_framework.Button ButtonSelectAll;
-        private Sky_framework.Button ButtonEncode;
+        private Sky_UI.Button ButtonSelectAll;
+        private Sky_UI.Button ButtonEncode;
         private System.Windows.Forms.TextBox DefineLine;
         private Label label1;
         private System.Windows.Forms.TextBox textBox1;
-        private Sky_framework.Button ButtonFile;
+        private Sky_UI.Button ButtonFile;
         private MenuDeroulant MenuDeroulantFile = new MenuDeroulant();
         private MenuDeroulant MenuDeroulantEncoding = new MenuDeroulant();
         private Encoding encodingUsed = Encoding.UTF8;
-        private Sky_framework.Button ButtonAbout;
+        private Sky_UI.Button ButtonAbout;
         private ButtonCircular buttonCircular1;
         private Label label2;
         private ButtonCircular buttonCircular2;
@@ -121,6 +121,7 @@ namespace Sky_note
                     FileLoaded = Environment.GetCommandLineArgs().Last();
                     this.Text = "Sky note - " + FileLoaded;
                     streamReader.Close();
+                    TextSaved = true;
                 }
             }
         }
@@ -148,7 +149,20 @@ namespace Sky_note
                     while (this.Opacity < 1);
 
                     BlurMainForm();
-                    UpdateDetectDialogControl update = new UpdateDetectDialogControl(CurrentVersion, await Sky_Updater.Update.DownloadStringAsync("https://serie-sky.netlify.app/Download/Sky note/Version.txt"));
+
+                    UpdateDetectDialogControl update;
+                    if (language == Language.French)
+                    {
+                                            update = new UpdateDetectDialogControl(0, CurrentVersion, await Sky_Updater.Update.DownloadStringAsync(
+                        "https://serie-sky.netlify.app/Download/Sky note/Version.txt"), await Sky_Updater.Update.DownloadStringAsync(
+                            "https://serie-sky.netlify.app/Download/Sky note/ReleaseNoteFR.txt"));
+                    }
+                    else
+                    {
+                                            update = new UpdateDetectDialogControl(1, CurrentVersion, await Sky_Updater.Update.DownloadStringAsync(
+                        "https://serie-sky.netlify.app/Download/Sky note/Version.txt"), await Sky_Updater.Update.DownloadStringAsync(
+                            "https://serie-sky.netlify.app/Download/Sky note/ReleaseNoteEN.txt"));
+                    }
                     update.BringToFront();
                     update.Location = new Point(this.Width / 2 - update.Width / 2, this.Height / 2 - update.Height / 2);
                     update.Anchor = AnchorStyles.None;
@@ -176,7 +190,20 @@ namespace Sky_note
                     while (this.Opacity < 1);
 
                     BlurMainForm();
-                    UpdateDetectDialogControl update = new UpdateDetectDialogControl(CurrentVersion, await Sky_Updater.Update.DownloadStringAsync("https://serie-sky.netlify.app/Download/Sky note/Version.txt"));
+                    
+                    UpdateDetectDialogControl update;
+                    if (language == Language.French)
+                    {
+                                            update = new UpdateDetectDialogControl(0, CurrentVersion, await Sky_Updater.Update.DownloadStringAsync(
+                        "https://serie-sky.netlify.app/Download/Sky note/Version.txt"), await Sky_Updater.Update.DownloadStringAsync(
+                            "https://serie-sky.netlify.app/Download/Sky note/ReleaseNoteFR.txt"));
+                    }
+                    else
+                    {
+                                            update = new UpdateDetectDialogControl(1, CurrentVersion, await Sky_Updater.Update.DownloadStringAsync(
+                        "https://serie-sky.netlify.app/Download/Sky note/Version.txt"), await Sky_Updater.Update.DownloadStringAsync(
+                            "https://serie-sky.netlify.app/Download/Sky note/ReleaseNoteEN.txt"));
+                    }
                     update.BringToFront();
                     update.Location = new Point(this.Width / 2 - update.Width / 2, this.Height / 2 - update.Height / 2);
                     update.Anchor = AnchorStyles.None;
@@ -197,7 +224,7 @@ namespace Sky_note
 
             if (Download == true)
             {
-                DownloadUpdaterDialog update = new DownloadUpdaterDialog("Sky note");
+                DownloadUpdaterDialog update = new DownloadUpdaterDialog((sbyte)language, "Sky note");
                 update.BringToFront();
                 update.Location = new Point(this.Width / 2 - update.Width / 2, this.Height / 2 - update.Height / 2);
                 update.Anchor = AnchorStyles.None;
@@ -309,16 +336,16 @@ namespace Sky_note
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.ButtonFile = new Sky_framework.Button();
-            this.ButtonSelectAll = new Sky_framework.Button();
-            this.ButtonEncode = new Sky_framework.Button();
+            this.ButtonFile = new Sky_UI.Button();
+            this.ButtonSelectAll = new Sky_UI.Button();
+            this.ButtonEncode = new Sky_UI.Button();
             this.DefineLine = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.ButtonAbout = new Sky_framework.Button();
-            this.buttonCircular1 = new Sky_framework.ButtonCircular();
+            this.ButtonAbout = new Sky_UI.Button();
+            this.buttonCircular1 = new Sky_UI.ButtonCircular();
             this.label2 = new System.Windows.Forms.Label();
-            this.buttonCircular2 = new Sky_framework.ButtonCircular();
+            this.buttonCircular2 = new Sky_UI.ButtonCircular();
             this.SuspendLayout();
             // 
             // ButtonFile
@@ -399,6 +426,8 @@ namespace Sky_note
             this.DefineLine.Size = new System.Drawing.Size(54, 22);
             this.DefineLine.TabIndex = 7;
             this.DefineLine.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DefineLine_KeyPress);
+            this.DefineLine.GotFocus += new EventHandler(this.DefineLine_GotFocus);
+            this.DefineLine.LostFocus += new EventHandler(this.DefineLine_LostFocus);
             // 
             // label1
             // 
@@ -510,9 +539,8 @@ namespace Sky_note
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BorderColor = System.Drawing.Color.Indigo;
             this.ButtonMaximizedVisible = true;
-            this.ClientSize = new System.Drawing.Size(922, 552);
-            this.MinimumSize = new Size(400, 250);
             this.KeyPreview = true;
+            this.MinimumSize = new Size(400, 250);
             this.KeyDown += new KeyEventHandler(This_KeyDown);
             this.FormClosing += new FormClosingEventHandler(This_FormClosing);
             this.Controls.Add(this.buttonCircular2);
@@ -525,7 +553,6 @@ namespace Sky_note
             this.Controls.Add(this.ButtonEncode);
             this.Controls.Add(this.ButtonSelectAll);
             this.Controls.Add(this.ButtonFile);
-            this.Location = new System.Drawing.Point(0, 0);
             this.Name = "MainForm";
             this.Text = "Sky note";
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("Sky note")));
@@ -539,6 +566,9 @@ namespace Sky_note
             this.Controls.SetChildIndex(this.buttonCircular1, 0);
             this.Controls.SetChildIndex(this.label2, 0);
             this.Controls.SetChildIndex(this.buttonCircular2, 0);
+            this.ClientSize = new System.Drawing.Size(922, 552);
+            this.Location = new Point(Screen.FromControl(this).WorkingArea.Width / 2 - this.Width / 2, Screen.FromControl(this).WorkingArea.Height / 2 - this.Height / 2);
+            this.ClientSize = new System.Drawing.Size(922, 552);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -718,7 +748,11 @@ namespace Sky_note
                 case (char)Keys.Return:
                     if (long.TryParse(DefineLine.Text, out long result) == true)
                     {
-                        if (GoLine(result) == false)
+                        if (GoLine(ref result) == true)
+                        {
+                            DefineLine.Text = result.ToString();
+                        }
+                        else
                         {
                             DefineLine.Text = "1";
                         }
@@ -731,14 +765,19 @@ namespace Sky_note
             }
         }
 
-        private bool GoLine(long line)
+        private bool GoLine(ref long line)
         {
             textBox1.Select();
-            if (textBox1.Text != string.Empty && line <= textBox1.Lines.Length)
+            if (textBox1.Text != string.Empty)
             {
                 int seed = 0, pos = -1;
 
                 line -= 1;
+
+                if (line >= textBox1.Lines.Length)
+                {
+                    line = textBox1.Lines.Length - 1;
+                }
 
                 if (line == 0)
                 {
@@ -759,6 +798,7 @@ namespace Sky_note
                 }
                 textBox1.ScrollToCaret();
                 textBox1.Refresh();
+                line += 1;
                 return true;
             }
             else
@@ -1100,6 +1140,16 @@ namespace Sky_note
                     }
                 }
             }
+        }
+
+        private void DefineLine_GotFocus(object sender, EventArgs e)
+        {
+            this.KeyPreview = false;
+        }
+
+        private void DefineLine_LostFocus(object sender, EventArgs e)
+        {
+            this.KeyPreview = true;
         }
     }
 

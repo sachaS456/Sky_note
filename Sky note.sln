@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sky note", "Sky note\Sky note.csproj", "{C7174D7F-E453-406D-AE65-66D07ADB31A5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sky framework", "..\Sky framework\Sky framework\Sky framework.csproj", "{F0E07420-87CE-4CA7-945D-54DA73481710}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sky UI", "..\Sky UI\Sky UI\Sky UI.csproj", "{F0E07420-87CE-4CA7-945D-54DA73481710}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sky Updater", "..\Sky multi Updater\Sky multi Updater\Sky Updater.csproj", "{EDAA1F77-1A2D-4D86-BBD3-A4A507FE0EEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sky Updater", "..\Sky Updater\Sky Updater\Sky Updater.csproj", "{EDAA1F77-1A2D-4D86-BBD3-A4A507FE0EEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

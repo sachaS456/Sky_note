@@ -1,0 +1,8 @@
+﻿Changes between 3.0.0 and 3.0.1:
+----------------------------------
+
+-fixed a problem when closing the application where the application 
+displayed a messageBox that the file were modified when it was not
+-fixed an issue where the text box for accessing a line accepted no 
+characters
+----------------------------------

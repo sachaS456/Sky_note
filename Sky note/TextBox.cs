@@ -23,12 +23,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
-using Sky_framework;
+using Sky_UI;
 
 namespace Sky_note
 {
     [ObsoleteAttribute("This class is obsolete. Project abandoned.", false)]
-    internal sealed class TextBox : Sky_framework.Rectangle
+    internal sealed class TextBox : Sky_UI.Rectangle
     {
         private System.Windows.Forms.TextBox TextBoxWriter = new System.Windows.Forms.TextBox();
         private Label nbLine = new Label();
